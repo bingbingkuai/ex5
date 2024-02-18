@@ -5,7 +5,7 @@
 
 podTemplate(containers: [
     containerTemplate(
-        name: 'gradle', image: 'gradle', command: 'sleep', args: '30d'
+        name: 'gradle', image: 'gradle:6.3-jdk14', command: 'sleep', args: '30d'
         ),
     ]) {
 
@@ -26,15 +26,15 @@ podTemplate(containers: [
             
                 stage("Tests") {
 		   try {
-                        sh '''
-        	            pwd
-               		    cd Chapter08/sample1
-                          ./gradlew test
-                          ./gradlew jacocoTestReport
-                        '''
-                    } catch (Exception E) {
-                        echo 'Failure detected'
-                    }
+			sh ''' pwd
+			cd Chapter08/sample1
+			./gradlew test
+			./gradlew jacocoTestCoverageVerification
+			./gradlew jacocoTestReport 
+			'''
+			} catch (Exception E) { 
+				echo 'Failure detected'
+			}
 
                     // from the HTML publisher plugin
                     // https://www.jenkins.io/doc/pipeline/steps/htmlpublisher/
