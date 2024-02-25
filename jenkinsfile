@@ -1,5 +1,5 @@
 // THis is a copy of Jenkins file
-// This will be used in wk6 ex2, multi pipeline
+// This will be used in wk6 ex2, multi pipeline, pull request
 
 // This example uses Jenkin's "scripted" syntax, as opposed to its "declarative" syntax
 // see: https://www.jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline
