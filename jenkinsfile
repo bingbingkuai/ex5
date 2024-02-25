@@ -1,74 +1,77 @@
+// THis is a copy of Jenkins file
+// This will be used in wk6 ex2, multi pipeline
+
 // This example uses Jenkin's "scripted" syntax, as opposed to its "declarative" syntax
 // see: https://www.jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline
-
 // Defines a Kubernetes pod template that can be used to create nodes.
 
 podTemplate(
 	containers: [
     		containerTemplate(
-        	name: 'gradle', image: 'gradle', command: 'sleep', args: '30d'
+        	        name: 'gradle', 
+                    image: 'gradle', 
+                    command: 'sleep', 
+                    args: '30d'
         	),
     	],
 	podRetention: onFailure()
 ) {
-
     node(POD_LABEL) {
-        stage('Run pipeline against a gradle project') {
-             // "container" Selects a container of the agent pod so that all shell steps are
-             // executed in that container.
-            container('gradle') {
+        // "container" Selects a container of the agent pod so that all shell steps are executed in that container.
+        container('gradle') {
+            stages {
+
                 stage('Build a gradle project') {
-                    // from the git plugin
-                    // https://www.jenkins.io/doc/pipeline/steps/git/
-                    // git 'https://github.com/dlambrig/Continuous-Delivery-with-Docker-and-Jenkins-Second-Edition.git'
-		    git 'https://github.com/bingbingkuai/chp5.git'
-                    sh '''
-                    cd Chapter08/sample1
-                    chmod +x gradlew
-                    '''
-                }
-            
-                stage("Tests") {
-		   try {
-			sh ''' pwd
-			cd Chapter08/sample1
-			./gradlew test
-			./gradlew jacocoTestCoverageVerification
-			./gradlew jacocoTestReport 
-			'''
-			} catch (Exception E) { 
-				echo 'Failure detected'
-			}
-
-                    // from the HTML publisher plugin
-                    // https://www.jenkins.io/doc/pipeline/steps/htmlpublisher/
-                    publishHTML (target: [
-                    	reportDir: 'Chapter08/sample1/build/reports/tests/test',
-                       reportFiles: 'index.html',
-                       reportName: "JaCoCo Report"
-                    ])                       
-                }
-
-		stage("Checkstyle test") {
-		    try {
+                    steps {
+                        // from the git plugin
+                        git 'https://github.com/bingbingkuai/chp5.git'
                         sh '''
-        	            pwd
-               		    cd Chapter08/sample1
-                          ./gradlew checkstyleMain
+                        cd Chapter08/sample1
+                        chmod +x gradlew
                         '''
-                    } catch (Exception E) {
-                        echo 'Failure detected'
                     }
-
-                    // from the HTML publisher plugin
-                    // https://www.jenkins.io/doc/pipeline/steps/htmlpublisher/
-                    publishHTML (target: [
-                    	reportDir: 'Chapter08/sample1/build/reports/checkstyle',
-                       reportFiles: 'checkstyle.xml',
-                       reportName: "JaCoCo Checkstyle"
-                    ])                       
                 }
-           }
-        }
+
+
+                stage('Code Coverage Test (main)') {
+                    when {
+                        // Run only on "main" branch
+                        branch 'main'
+                    }
+                    steps {
+                        try {
+                            echo 'Code Coverage Test on main branch'
+                            sh ''' pwd
+                            cd Chapter08/sample1
+                            ./gradlew test
+                            ./gradlew jacocoTestCoverageVerification
+                            '''
+                            } catch (Exception E) { 
+                                echo 'Failure detected'
+                            }
+                    }
+                }
+
+                stage('Checkstyle (brOne)') {
+                    when {
+                        // Run only if not on main branch
+                        not { branch 'main' }
+                    }
+                    steps {
+                        try {
+                            echo 'Checkstyle Test not on main branch'
+                            sh '''
+                                pwd
+                                cd Chapter08/sample1
+                                ./gradlew checkstyleMain
+                                '''
+                        } catch (Exception E) {
+                                echo 'Failure detected'
+                        }
+                    }
+                }
+            }
+        }        
+
     }
 }
