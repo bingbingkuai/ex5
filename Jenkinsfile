@@ -52,10 +52,10 @@ podTemplate(
                     }
                 }
 
-                stage('Checkstyle (brOne)') {
+                stage('Checkstyle (branch)') {
                     when {
                         // Run only if not on main branch
-                        not { branch 'main' }
+                         branch 'br2' 
                     }
                     steps {
                         try {
