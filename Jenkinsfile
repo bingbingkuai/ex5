@@ -8,7 +8,7 @@
 podTemplate(
 	containers: [
     		containerTemplate(
-        	        name: 'gradle', 
+        	    name: 'gradle', 
                     image: 'gradle', 
                     command: 'sleep', 
                     args: '30d'
@@ -19,7 +19,7 @@ podTemplate(
     node(POD_LABEL) {
         // "container" Selects a container of the agent pod so that all shell steps are executed in that container.
         container('gradle') {
-            stages {
+            stage {
 
                 stage('Build a gradle project') {
                     steps {
