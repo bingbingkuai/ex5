@@ -18,9 +18,9 @@ podTemplate(
 ) {
     node(POD_LABEL) {
         // "container" Selects a container of the agent pod so that all shell steps are executed in that container.
-        container('gradle') {
-            stage {
-
+        
+        stage ('Multipipe line test'){
+		container('gradle') {
                 stage('Build a gradle project') {
                     steps {
                         // from the git plugin
