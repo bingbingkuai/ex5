@@ -59,7 +59,7 @@ podTemplate(
                     }
                     steps {
                         try {
-                            echo 'Not on the main branch, let's do a Checkstyle Test when not on the main branch'
+                            echo 'Not on the main branch, do a Checkstyle Test when not on the main branch'
                             sh '''
                                 pwd
                                 cd Chapter08/sample1
