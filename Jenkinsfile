@@ -40,7 +40,7 @@ podTemplate(
                     }
                     steps {
                         try {
-                            echo 'This is on main branch, do Code Coverage Test on the main branch'
+                            echo 'This is on main branch, we need to do Code Coverage Test on the main branch'
                             sh ''' pwd
                             cd Chapter08/sample1
                             ./gradlew test
@@ -59,7 +59,7 @@ podTemplate(
                     }
                     steps {
                         try {
-                            echo 'Not on main branch, do Checkstyle Test when not on the main branch'
+                            echo 'Not on the main branch, let's do a Checkstyle Test when not on the main branch'
                             sh '''
                                 pwd
                                 cd Chapter08/sample1
