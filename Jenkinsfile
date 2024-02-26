@@ -35,12 +35,12 @@ podTemplate(
 
                 stage('Code Coverage Test (main)') {
                     when {
-                        // Run only on "main" branch
+                        // Run only on the "main" branch
                         branch 'main'
                     }
                     steps {
                         try {
-                            echo 'Code Coverage Test on main branch'
+                            echo 'Code Coverage Test on the main branch'
                             sh ''' pwd
                             cd Chapter08/sample1
                             ./gradlew test
@@ -59,7 +59,7 @@ podTemplate(
                     }
                     steps {
                         try {
-                            echo 'Checkstyle Test not on main branch'
+                            echo 'Checkstyle Test not on the main branch'
                             sh '''
                                 pwd
                                 cd Chapter08/sample1
